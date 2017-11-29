@@ -1,0 +1,27 @@
+simulation environment
+roslaunch turtlebot3_gazebo turtlebot3_maze.launch
+
+robot
+roslaunch turtlebot3_bringup turtlebot3_robot.launch
+
+teleop
+roslaunch turtlebot3_teleop turtlebot3_teleop_key.launch
+
+======
+
+SLAM
+roslaunch turtlebot3_slam turtlebot3_slam.launch
+
+rviz SLAM config
+rosrun rviz rviz -d `rospack find turtlebot3_slam`/rviz/turtlebot3_slam.rviz
+
+save map
+rosrun map_server map_saver -f ~/map
+
+======
+
+navigation
+roslaunch turtlebot3_navigation turtlebot3_navigation.launch map_file:=/home/burger/catkin_ws/src/kuo_lab5/map/map_real.yaml
+
+rviz Navigation config
+rosrun rviz rviz -d `rospack find turtlebot3_navigation`/rviz/turtlebot3_nav.rviz

@@ -1,0 +1,61 @@
+state node
+    # tf
+      - subscribe to robot's pose in the map
+        /base_footprint in /map
+        Tutorial: http://wiki.ros.org/tf2/Tutorials/Writing%20a%20tf2%20listener%20%28Python%29
+        Msg tyep: http://docs.ros.org/jade/api/geometry_msgs/html/msg/TransformStamped.html
+    # topic
+        - subscribe to sign detection result
+        - subscribe to move_base's status
+            /move_base/status
+            Type: http://docs.ros.org/api/actionlib_msgs/html/msg/GoalStatusArray.html
+        - publish to robot's low level controller
+            /cmd_vel
+            Type: http://docs.ros.org/api/geometry_msgs/html/msg/Twist.html
+        - publish to move_base's goal
+            /move_base_simple/goal
+            Type: http://docs.ros.org/api/geometry_msgs/html/msg/PoseStamped.html
+    # service
+        - request all map server's services
+    # util functions
+        - g2l: global to local
+        - l2g: local to global
+        - q2a: quaternion to angle
+
+sign detection node
+    # topic
+        - subscribe to image
+            300x300 image
+            /raspicam_node/image/compressed
+            Ref: http://wiki.ros.org/cv_bridge/Tutorials/ConvertingBetweenROSImagesAndOpenCVImagesPython
+        - subscribe to lidar
+            range data
+            /scan
+            Type: http://docs.ros.org/api/sensor_msgs/html/msg/LaserScan.html
+        - publish sign detection result
+            sign type
+            sign facing (local)
+            sign distance
+            sign dir (local)
+            customized msg: http://wiki.ros.org/ROS/Tutorials/CreatingMsgAndSrv
+
+map server node (everything in global frame)
+    # tf
+        - subscribe to robot's pose in the map
+            /base_footprint in /map
+    # service
+        - provide get nearest k node (customized srv)
+            request: query position
+                Type: http://docs.ros.org/api/geometry_msgs/html/msg/Point.html
+            response: k node position
+                Type: http://docs.ros.org/api/geometry_msgs/html/msg/PoseArray.html
+        - provide init map (customized srv)
+            request: init position
+                Type: http://docs.ros.org/api/geometry_msgs/html/msg/Point.html
+            response: None
+                Type: http://docs.ros.org/api/std_msgs/html/msg/Empty.html
+        - provide query next waypoints (customized srv)
+            request: robot's position
+                Type: http://docs.ros.org/api/geometry_msgs/html/msg/Point.html
+            response: next k posible waypoints
+                Type: http://docs.ros.org/api/geometry_msgs/html/msg/PoseArray.html
