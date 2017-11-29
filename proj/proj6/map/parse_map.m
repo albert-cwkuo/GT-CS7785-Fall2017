@@ -1,5 +1,5 @@
 % compute branching points of the skeleton map
-I=imread('./map.pgm');
+I=imread('./sim/map.pgm');
 Is=im2single(I);
 Ibw=imbinarize(Is,0.9);
 Ishrk=bwmorph(Ibw,'spur');
@@ -17,7 +17,6 @@ Ig(Ibpts(:))=0;
 Ib=I;
 Ib(Iskel(:))=0;
 Ib(Ibpts(:))=0;
-I3c;
 I3c=cat(3,Ir,Ig,Ib);
 f=figure;
 imshow(I3c)
