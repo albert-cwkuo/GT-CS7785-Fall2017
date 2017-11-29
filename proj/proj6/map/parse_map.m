@@ -1,5 +1,5 @@
 % compute branching points of the skeleton map
-I=imread('./sim/map.pgm');
+I=imread('./real/map.pgm');
 Is=im2single(I);
 Ibw=imbinarize(Is,0.9);
 Ishrk=bwmorph(Ibw,'spur');
@@ -29,11 +29,26 @@ Iskel = int8(Iskel);
 Iskel(Ibpts(:)) = -1;
 map_graph = cell(num_targets, 2);
 for i=1:num_targets
-    text(targets(i,1),targets(i,2),num2str(i),'Color','blue', 'FontSize',14);
+    text(targets(i,1),targets(i,2),num2str(i),'Color','blue', 'FontSize',16);
     map_graph{i,1} = targets(i,:);
     [map_graph{i,2}, ~] = search_neighbor(Iskel,targets(i,1),targets(i,2),targets);
 end
-% saveas(f,'parsed_map.png');
+
+% transform pixel coordinate to world coordinate
+res=0.05;
+ll_w=[-10,-10];
+orig_p = [1-ll_w(1)/res, size(I3c,1)+ll_w(2)/res];
+hold on
+plot(orig_p(1),orig_p(2),'b*');
+hold off
+for i=1:num_targets
+    pt_p = [targets(i,1)-orig_p(1), orig_p(2)-targets(i,2)];
+    map_graph{i,1} = pt_p*res;
+    disp(map_graph{i,1})
+end
+
+
+saveas(f,'parsed_map.png');
 save('map_graph.mat', 'map_graph')
 
 function [results, I] = search_neighbor(I, x, y, targets)
