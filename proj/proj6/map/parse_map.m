@@ -1,5 +1,5 @@
 % compute branching points of the skeleton map
-I=imread('./real/map.pgm');
+I=imread('./sim/map.pgm');
 Is=im2single(I);
 Ibw=imbinarize(Is,0.9);
 Ishrk=bwmorph(Ibw,'spur');
@@ -44,11 +44,11 @@ hold off
 for i=1:num_targets
     pt_p = [targets(i,1)-orig_p(1), orig_p(2)-targets(i,2)];
     map_graph{i,1} = pt_p*res;
-    disp(map_graph{i,1})
+    disp(map_graph{i,2})
 end
 
 
-saveas(f,'parsed_map.png');
+%saveas(f,'parsed_map.png');
 save('map_graph.mat', 'map_graph')
 
 function [results, I] = search_neighbor(I, x, y, targets)
