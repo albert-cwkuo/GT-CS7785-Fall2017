@@ -1,0 +1,3 @@
+geometry_msgs/Point query
+---
+geometry_msgs/PoseArray waypoints

@@ -1,0 +1,4 @@
+geometry_msgs/Point query
+int32 k
+---
+geometry_msgs/PoseArray knn
