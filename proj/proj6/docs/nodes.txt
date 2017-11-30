@@ -1,4 +1,4 @@
-state node
+hunter node
     # tf
       - subscribe to robot's pose in the map
         /base_footprint in /map
@@ -6,23 +6,21 @@ state node
         Msg tyep: http://docs.ros.org/jade/api/geometry_msgs/html/msg/TransformStamped.html
     # topic
         - subscribe to sign detection result
-        - subscribe to move_base's status
-            /move_base/status
-            Type: http://docs.ros.org/api/actionlib_msgs/html/msg/GoalStatusArray.html
         - publish to robot's low level controller
             /cmd_vel
             Type: http://docs.ros.org/api/geometry_msgs/html/msg/Twist.html
-        - publish to move_base's goal
-            /move_base_simple/goal
-            Type: http://docs.ros.org/api/geometry_msgs/html/msg/PoseStamped.html
     # service
         - request all map server's services
+    # actionlib
+        - subscribe to move_base's action goal
+            /move_base
+            Type: http://docs.ros.org/api/move_base_msgs/html/action/MoveBase.html
     # util functions
         - g2l: global to local
         - l2g: local to global
         - q2a: quaternion to angle
 
-sign detection node
+sign_detector node
     # topic
         - subscribe to image
             300x300 image
@@ -32,6 +30,8 @@ sign detection node
             range data
             /scan
             Type: http://docs.ros.org/api/sensor_msgs/html/msg/LaserScan.html
+        - publish detection bounding box
+            image
         - publish sign detection result
             sign type
             sign facing (local)
@@ -39,11 +39,14 @@ sign detection node
             sign dir (local)
             customized msg: http://wiki.ros.org/ROS/Tutorials/CreatingMsgAndSrv
 
-map server node (everything in global frame)
+roadmap node (everything in global frame)
     # tf
         - subscribe to robot's pose in the map
             /base_footprint in /map
     # service
+        - request to move_base's make plan service
+            /move_base/make_plan
+            Type: http://docs.ros.org/api/nav_msgs/html/srv/GetPlan.html
         - provide get nearest k node (customized srv)
             request: query position
                 Type: http://docs.ros.org/api/geometry_msgs/html/msg/Point.html
